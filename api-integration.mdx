@@ -1,0 +1,283 @@
+---
+title: API Integration
+description: Guide to integrating with Dmitry Nesterenko Documentation APIs and webhooks
+---
+
+## Overview
+
+Dmitry Nesterenko Documentation provides a comprehensive REST API that allows you to programmatically manage your documentation, automate workflows, and integrate with other tools. The API follows RESTful principles and uses JSON for data exchange.
+
+<Columns cols={3}>
+  <Card title="Authentication" icon="key" href="#authentication">
+    Secure API access with tokens and OAuth.
+  </Card>
+  <Card title="Rate Limits" icon="clock" href="#rate-limits">
+    Understand API usage limits and best practices.
+  </Card>
+  <Card title="Error Handling" icon="alert-triangle" href="#error-handling">
+    Handle API errors gracefully in your applications.
+  </Card>
+</Columns>
+
+## Authentication
+
+All API requests require authentication. Use API tokens or OAuth for secure access.
+
+<Callout kind="info">
+  Generate API tokens from your account settings. Keep tokens secure and rotate them regularly.
+</Callout>
+
+### API Token Authentication
+
+Include your API token in the Authorization header for all requests.
+
+<CodeGroup tabs="curl,JavaScript,Python">
+  ```bash
+curl -H "Authorization: Bearer YOUR_API_TOKEN" \
+     -H "Content-Type: application/json" \
+     https://api.docs.example.com/v1/projects
+  ```
+  ```javascript
+const headers = {
+  'Authorization': 'Bearer YOUR_API_TOKEN',
+  'Content-Type': 'application/json'
+};
+
+fetch('https://api.docs.example.com/v1/projects', { headers })
+  .then(response => response.json())
+  .then(data => console.log(data));
+  ```
+  ```python
+import requests
+
+headers = {
+    'Authorization': 'Bearer YOUR_API_TOKEN',
+    'Content-Type': 'application/json'
+}
+
+response = requests.get('https://api.docs.example.com/v1/projects', headers=headers)
+print(response.json())
+  ```
+</CodeGroup>
+
+### OAuth Integration
+
+For third-party applications, use OAuth 2.0 for delegated access.
+
+<Steps>
+  <Step title="Register Application" icon="plus">
+    Create an OAuth application in your workspace settings.
+  </Step>
+  <Step title="Get Authorization Code" icon="key">
+    Redirect users to the authorization endpoint to obtain a code.
+  </Step>
+  <Step title="Exchange for Token" icon="refresh-cw">
+    Exchange the authorization code for an access token.
+  </Step>
+  <Step title="Make API Calls" icon="send">
+    Use the access token to authenticate API requests.
+  </Step>
+</Steps>
+
+## Core API Endpoints
+
+Explore the main API endpoints for managing projects, documents, and users.
+
+<Tabs>
+  <Tab title="Projects" icon="folder">
+    Manage documentation projects and their settings.
+    
+    <ExpandableGroup>
+      <Expandable title="List Projects" default-open="true">
+        GET /v1/projects - Retrieve all projects in your workspace.
+      </Expandable>
+      <Expandable title="Create Project" default-open="false">
+        POST /v1/projects - Create a new documentation project.
+      </Expandable>
+      <Expandable title="Update Project" default-open="false">
+        PUT /v1/projects/{id} - Modify project settings.
+      </Expandable>
+      <Expandable title="Delete Project" default-open="false">
+        DELETE /v1/projects/{id} - Remove a project permanently.
+      </Expandable>
+    </ExpandableGroup>
+  </Tab>
+  <Tab title="Documents" icon="file-text">
+    Create and manage individual documents within projects.
+  </Tab>
+  <Tab title="Users" icon="users">
+    Manage workspace users and their permissions.
+  </Tab>
+</Tabs>
+
+## Webhooks
+
+Set up webhooks to receive real-time notifications about changes in your documentation.
+
+<Callout kind="tip">
+  Webhooks allow you to integrate documentation updates with your CI/CD pipeline or notification systems.
+</Callout>
+
+### Configuring Webhooks
+
+Create webhooks to listen for specific events in your workspace.
+
+<Steps>
+  <Step title="Create Webhook" icon="plus">
+    Navigate to workspace settings and create a new webhook.
+  </Step>
+  <Step title="Set URL" icon="link">
+    Provide the endpoint URL where notifications should be sent.
+  </Step>
+  <Step title="Choose Events" icon="filter">
+    Select which events should trigger the webhook (document created, updated, etc.).
+  </Step>
+  <Step title="Test Webhook" icon="check-circle">
+    Send a test payload to verify your endpoint is working.
+  </Step>
+</Steps>
+
+### Webhook Payloads
+
+Webhook payloads contain detailed information about the event that triggered them.
+
+<CodeGroup tabs="Document Created,Project Updated">
+  ```json
+{
+  "event": "document.created",
+  "timestamp": "2024-10-15T10:30:00Z",
+  "data": {
+    "id": "doc_123",
+    "title": "New API Guide",
+    "projectId": "proj_456",
+    "authorId": "user_789",
+    "createdAt": "2024-10-15T10:30:00Z"
+  }
+}
+  ```
+  ```json
+{
+  "event": "project.updated",
+  "timestamp": "2024-10-15T11:00:00Z",
+  "data": {
+    "id": "proj_456",
+    "name": "Updated Project Name",
+    "description": "New project description",
+    "updatedBy": "user_789",
+    "updatedAt": "2024-10-15T11:00:00Z"
+  }
+}
+  ```
+</CodeGroup>
+
+## SDKs and Libraries
+
+Use our official SDKs to simplify API integration in your applications.
+
+<Columns cols={2}>
+  <Card title="JavaScript SDK" icon="code" href="#js-sdk">
+    Node.js and browser-compatible SDK for JavaScript applications.
+  </Card>
+  <Card title="Python SDK" icon="code" href="#python-sdk">
+    Python library for server-side integrations.
+  </Card>
+</Columns>
+
+### Installing SDKs
+
+Install the appropriate SDK for your programming language.
+
+<CodeGroup tabs="npm,pip">
+  ```bash
+npm install @dmitrynesterenko/docs-sdk
+  ```
+  ```bash
+pip install dmitrynesterenko-docs-sdk
+  ```
+</CodeGroup>
+
+### Using the SDK
+
+Initialize the SDK with your API token and start making requests.
+
+<CodeGroup tabs="JavaScript,Python">
+  ```javascript
+const { DocsClient } = require('@dmitrynesterenko/docs-sdk');
+
+const client = new DocsClient({
+  token: 'YOUR_API_TOKEN',
+  baseUrl: 'https://api.docs.example.com/v1'
+});
+
+// List all projects
+client.projects.list().then(projects => {
+  console.log(projects);
+});
+  ```
+  ```python
+from docs_sdk import DocsClient
+
+client = DocsClient(
+    token='YOUR_API_TOKEN',
+    base_url='https://api.docs.example.com/v1'
+)
+
+# List all projects
+projects = client.projects.list()
+print(projects)
+  ```
+</CodeGroup>
+
+## Rate Limits and Best Practices
+
+Understand API rate limits and follow best practices for reliable integration.
+
+<ExpandableGroup>
+  <Expandable title="Rate Limits" default-open="true">
+    - 1000 requests per hour for free tier
+    - 10000 requests per hour for paid plans
+    - Rate limit headers included in responses
+  </Expandable>
+  <Expandable title="Best Practices" default-open="false">
+    - Implement exponential backoff for retries
+    - Cache responses when appropriate
+    - Use webhooks for real-time updates
+    - Monitor your API usage
+  </Expandable>
+</ExpandableGroup>
+
+## Error Handling
+
+Handle API errors gracefully with appropriate status codes and error messages.
+
+<Callout kind="danger">
+  Always check response status codes and handle errors in your application code.
+</Callout>
+
+### Common Error Codes
+
+| Status Code | Description |
+|-------------|-------------|
+| 400 | Bad Request - Invalid parameters |
+| 401 | Unauthorized - Invalid or missing authentication |
+| 403 | Forbidden - Insufficient permissions |
+| 404 | Not Found - Resource does not exist |
+| 429 | Too Many Requests - Rate limit exceeded |
+| 500 | Internal Server Error - Server-side issue |
+
+### Error Response Format
+
+All errors follow a consistent JSON format for easy handling.
+
+```json
+{
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "The request parameters are invalid",
+    "details": {
+      "field": "title",
+      "issue": "Title is required"
+    }
+  }
+}
+```

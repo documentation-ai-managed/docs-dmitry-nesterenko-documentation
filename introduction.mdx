@@ -1,0 +1,128 @@
+---
+title: Introduction
+description: Overview of Dmitry Nesterenko Documentation and its core capabilities
+---
+
+## Getting Started
+
+Dmitry Nesterenko Documentation provides a comprehensive platform for organizing and managing all your project documentation in one centralized space. Whether you're building APIs, developing software, or maintaining technical documentation, this tool helps you create, maintain, and share high-quality documentation efficiently.
+
+<Columns cols={3}>
+  <Card title="Quick Setup" icon="zap" href="#quick-setup">
+    Get up and running in minutes with our streamlined setup process.
+  </Card>
+  <Card title="API Integration" icon="code" href="#api-integration">
+    Seamlessly integrate with your existing development workflow.
+  </Card>
+  <Card title="Multi-format Support" icon="file-text" href="#multi-format">
+    Support for Markdown, API specs, and various documentation formats.
+  </Card>
+</Columns>
+
+## Key Features
+
+### Centralized Documentation Management
+
+Store all your project documentation in one place, making it easy for your team to find and access the information they need. The platform supports multiple documentation types including API references, user guides, and technical specifications.
+
+<Steps>
+  <Step title="Create Project" icon="plus">
+    Start by creating a new project in your documentation space.
+  </Step>
+  <Step title="Import Existing Docs" icon="upload">
+    Import your existing documentation files or API specifications.
+  </Step>
+  <Step title="Customize Structure" icon="settings">
+    Organize your documentation with custom navigation and categories.
+  </Step>
+  <Step title="Share with Team" icon="users">
+    Share your documentation with team members and stakeholders.
+  </Step>
+</Steps>
+
+### Real-time Collaboration
+
+Enable your team to collaborate on documentation in real-time. Multiple users can edit documents simultaneously, with version control and change tracking to maintain quality and accuracy.
+
+<Callout kind="tip">
+  Use the built-in commenting system to discuss changes and improvements with your team.
+</Callout>
+
+### API Documentation Generation
+
+Automatically generate comprehensive API documentation from your OpenAPI specifications. The platform creates interactive API references with code examples, parameter descriptions, and response schemas.
+
+<CodeGroup tabs="JavaScript,Python">
+  ```javascript
+// Example API call using JavaScript
+fetch('/api/projects')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+  ```
+  ```python
+# Example API call using Python
+import requests
+
+response = requests.get('/api/projects')
+if response.status_code == 200:
+    data = response.json()
+    print(data)
+else:
+    print(f'Error: {response.status_code}')
+  ```
+</CodeGroup>
+
+### Version Control Integration
+
+Connect your documentation to version control systems like Git to track changes over time and maintain different versions of your documentation alongside your code.
+
+<Tabs>
+  <Tab title="Git Integration" icon="git-branch">
+    Link your documentation projects to Git repositories for seamless version control.
+    
+    <Expandable title="Supported Git Providers" default-open="false">
+      - GitHub
+      - GitLab
+      - Bitbucket
+      - Self-hosted Git servers
+    </Expandable>
+  </Tab>
+  <Tab title="Change History" icon="history">
+    View detailed change history for all documentation updates.
+  </Tab>
+  <Tab title="Rollback" icon="refresh-cw">
+    Easily rollback to previous versions if needed.
+  </Tab>
+</Tabs>
+
+### Search and Discovery
+
+Powerful search functionality helps users quickly find the documentation they need. Full-text search across all documents with filtering and faceting capabilities.
+
+<ExpandableGroup>
+  <Expandable title="Advanced Search Features" default-open="false">
+    - Full-text search across all content
+    - Filter by document type, author, or date
+    - Search within API specifications
+    - Save and share search queries
+  </Expandable>
+  <Expandable title="Search Tips" default-open="false">
+    Use quotes for exact phrases and operators like AND/OR for complex queries.
+  </Expandable>
+</ExpandableGroup>
+
+### Export and Publishing
+
+Export your documentation in multiple formats including PDF, HTML, and static sites. Publish documentation to internal portals or public websites with custom branding.
+
+<Update label="2024-10-01" description="v1.0.0" tags={["feature"]}>
+## Initial Release
+
+- Core documentation management platform
+- API documentation generation
+- Team collaboration features
+- Version control integration
+</Update>
+
+This documentation platform is designed to scale with your organization, from small teams to large enterprises. Start exploring the features and capabilities to see how Dmitry Nesterenko Documentation can streamline your documentation workflow.

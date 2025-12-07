@@ -1,0 +1,287 @@
+---
+title: Webhooks
+description: Setting up and managing webhooks for real-time documentation updates
+---
+
+## Introduction to Webhooks
+
+Webhooks in Dmitry Nesterenko Documentation enable real-time notifications about changes in your documentation. When specific events occur, such as document updates or project changes, the platform sends HTTP POST requests to your configured endpoints.
+
+<Columns cols={2}>
+  <Card title="Event Types" icon="bell" href="#event-types">
+    Learn about different webhook events you can subscribe to.
+  </Card>
+  <Card title="Security" icon="shield" href="#security">
+    Secure your webhook endpoints with signature verification.
+  </Card>
+</Columns>
+
+## Setting Up Webhooks
+
+Configure webhooks in your workspace or project settings to start receiving notifications.
+
+<Steps>
+  <Step title="Access Settings" icon="settings">
+    Navigate to workspace or project settings in the dashboard.
+  </Step>
+  <Step title="Create Webhook" icon="plus">
+    Click "Add Webhook" and provide a name and endpoint URL.
+  </Step>
+  <Step title="Select Events" icon="filter">
+    Choose which events should trigger this webhook.
+  </Step>
+  <Step title="Test Configuration" icon="check-circle">
+    Send a test payload to verify your endpoint receives notifications.
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+  Use HTTPS URLs for webhook endpoints to ensure secure data transmission.
+</Callout>
+
+## Supported Events
+
+Subscribe to various events to receive notifications about documentation changes.
+
+<ExpandableGroup>
+  <Expandable title="Document Events" default-open="true">
+    - `document.created` - New document added
+    - `document.updated` - Document content modified
+    - `document.deleted` - Document removed
+    - `document.published` - Document made public
+  </Expandable>
+  <Expandable title="Project Events" default-open="false">
+    - `project.created` - New project created
+    - `project.updated` - Project settings changed
+    - `project.deleted` - Project removed
+    - `project.archived` - Project archived
+  </Expandable>
+  <Expandable title="User Events" default-open="false">
+    - `user.invited` - User invited to workspace
+    - `user.joined` - User accepted invitation
+    - `user.removed` - User removed from workspace
+    - `user.role_changed` - User permissions updated
+  </Expandable>
+</ExpandableGroup>
+
+## Webhook Payloads
+
+Each webhook delivery contains a JSON payload with event details and metadata.
+
+<CodeGroup tabs="Document Created,Project Updated">
+  ```json
+{
+  "id": "wh_1234567890",
+  "event": "document.created",
+  "timestamp": "2024-10-15T10:30:00Z",
+  "workspace": {
+    "id": "ws_abcdef",
+    "name": "My Workspace"
+  },
+  "data": {
+    "id": "doc_xyz789",
+    "title": "New API Documentation",
+    "projectId": "proj_456",
+    "authorId": "user_123",
+    "createdAt": "2024-10-15T10:30:00Z",
+    "url": "https://docs.example.com/docs/doc_xyz789"
+  }
+}
+  ```
+  ```json
+{
+  "id": "wh_0987654321",
+  "event": "project.updated",
+  "timestamp": "2024-10-15T11:15:00Z",
+  "workspace": {
+    "id": "ws_abcdef",
+    "name": "My Workspace"
+  },
+  "data": {
+    "id": "proj_456",
+    "name": "Updated Project Name",
+    "description": "New description",
+    "updatedBy": "user_123",
+    "updatedAt": "2024-10-15T11:15:00Z"
+  }
+}
+  ```
+</CodeGroup>
+
+## Security and Verification
+
+Verify webhook authenticity using signature headers to ensure requests come from our platform.
+
+<Callout kind="danger">
+  Always verify webhook signatures to prevent malicious requests from reaching your endpoints.
+</Callout>
+
+### Signature Verification
+
+Each webhook request includes an `X-Docs-Signature` header with an HMAC-SHA256 signature.
+
+<CodeGroup tabs="Node.js,Python,PHP">
+  ```javascript
+const crypto = require('crypto');
+
+function verifySignature(payload, signature, secret) {
+  const expectedSignature = crypto
+    .createHmac('sha256', secret)
+    .update(payload, 'utf8')
+    .digest('hex');
+  
+  return crypto.timingSafeEqual(
+    Buffer.from(signature, 'hex'),
+    Buffer.from(expectedSignature, 'hex')
+  );
+}
+
+// Usage in Express
+const signature = req.headers['x-docs-signature'];
+const payload = JSON.stringify(req.body);
+const secret = process.env.WEBHOOK_SECRET;
+
+if (verifySignature(payload, signature, secret)) {
+  // Process webhook
+} else {
+  res.status(401).send('Invalid signature');
+}
+  ```
+  ```python
+import hmac
+import hashlib
+
+def verify_signature(payload, signature, secret):
+    expected = hmac.new(
+        secret.encode('utf-8'),
+        payload.encode('utf-8'),
+        hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(signature, expected)
+
+# Usage in Flask
+signature = request.headers.get('X-Docs-Signature')
+payload = request.get_json()
+secret = os.environ.get('WEBHOOK_SECRET')
+
+if verify_signature(json.dumps(payload, sort_keys=True), signature, secret):
+    # Process webhook
+else:
+    abort(401)
+  ```
+  ```php
+function verifySignature($payload, $signature, $secret) {
+    $expected = hash_hmac('sha256', $payload, $secret);
+    return hash_equals($signature, $expected);
+}
+
+// Usage
+$signature = $_SERVER['HTTP_X_DOCS_SIGNATURE'];
+$payload = file_get_contents('php://input');
+$secret = getenv('WEBHOOK_SECRET');
+
+if (verifySignature($payload, $signature, $secret)) {
+    // Process webhook
+} else {
+    http_response_code(401);
+    echo 'Invalid signature';
+}
+  ```
+</CodeGroup>
+
+## Handling Webhooks
+
+Implement robust webhook handling with retries, logging, and error management.
+
+<Tabs>
+  <Tab title="Retry Logic" icon="refresh-cw">
+    Handle failed deliveries with exponential backoff.
+    
+    <Steps>
+      <Step title="Log Attempts" icon="file-text">
+        Record all webhook delivery attempts.
+      </Step>
+      <Step title="Implement Backoff" icon="clock">
+        Use exponential backoff for retries (1s, 2s, 4s, etc.).
+      </Step>
+      <Step title="Set Max Retries" icon="x-circle">
+        Limit retry attempts to prevent infinite loops.
+      </Step>
+      <Step title="Alert on Failures" icon="alert-triangle">
+        Notify administrators of persistent failures.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Error Handling" icon="alert-circle">
+    Manage different types of webhook errors gracefully.
+  </Tab>
+  <Tab title="Idempotency" icon="check-circle">
+    Ensure webhook processing is idempotent to handle duplicate deliveries.
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+Follow these guidelines for reliable webhook integration.
+
+<ExpandableGroup>
+  <Expandable title="Endpoint Requirements" default-open="true">
+    - Use HTTPS URLs only
+    - Respond with 2xx status codes quickly (< 5 seconds)
+    - Handle both GET and POST methods
+    - Return appropriate HTTP status codes
+  </Expandable>
+  <Expandable title="Security Measures" default-open="false">
+    - Always verify signatures
+    - Use secret keys securely
+    - Implement rate limiting
+    - Log all webhook activity
+  </Expandable>
+  <Expandable title="Monitoring" default-open="false">
+    - Track delivery success rates
+    - Monitor response times
+    - Set up alerts for failures
+    - Keep webhook secrets rotated
+  </Expandable>
+</ExpandableGroup>
+
+## Troubleshooting
+
+Common webhook issues and their solutions.
+
+<Callout kind="info">
+  Check webhook delivery logs in your workspace settings for debugging information.
+</Callout>
+
+| Issue | Possible Cause | Solution |
+|-------|----------------|----------|
+| Webhook not triggering | Event not selected | Check event subscriptions |
+| Invalid signature | Wrong secret key | Verify webhook secret |
+| Timeout errors | Slow endpoint | Optimize response time |
+| Duplicate deliveries | Network issues | Implement idempotency |
+
+### Testing Webhooks
+
+Use tools like ngrok or webhook testing services to develop and test webhook integrations locally.
+
+<CodeGroup tabs="ngrok,LocalTunnel">
+  ```bash
+# Install ngrok
+npm install -g ngrok
+
+# Start tunnel
+ngrok http 3000
+
+# Use the HTTPS URL in webhook settings
+# https://abc123.ngrok.io/webhook
+  ```
+  ```bash
+# Install localtunnel
+npm install -g localtunnel
+
+# Start tunnel
+lt --port 3000
+
+# Use the generated URL in webhook settings
+  ```
+</CodeGroup>

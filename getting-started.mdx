@@ -1,0 +1,165 @@
+---
+title: Getting Started
+description: Step-by-step guide to setting up and using Dmitry Nesterenko Documentation
+---
+
+## Account Setup
+
+To get started with Dmitry Nesterenko Documentation, first create your account and set up your initial workspace. The platform offers a free tier for individual users and teams.
+
+<Steps>
+  <Step title="Sign Up" icon="user-plus">
+    Visit the platform website and click the sign-up button. Provide your email address and create a secure password.
+  </Step>
+  <Step title="Verify Email" icon="mail">
+    Check your email for a verification link and click it to activate your account.
+  </Step>
+  <Step title="Create Workspace" icon="folder-plus">
+    Set up your first workspace by providing a name and description for your documentation projects.
+  </Step>
+  <Step title="Invite Team" icon="users">
+    Add team members by entering their email addresses and assigning appropriate permissions.
+  </Step>
+</Steps>
+
+## Creating Your First Project
+
+Once your workspace is set up, create your first documentation project to start organizing your content.
+
+<Callout kind="info">
+  Projects help you organize related documentation together, such as API docs, user guides, and technical specifications.
+</Callout>
+
+<Columns cols={2}>
+  <Card title="Project Types" icon="folder" href="#project-types">
+    Choose from API documentation, user guides, or general technical documentation projects.
+  </Card>
+  <Card title="Import Options" icon="upload" href="#import-options">
+    Import existing documentation from various sources including Git repositories and file uploads.
+  </Card>
+</Columns>
+
+### Project Configuration
+
+Configure your project settings to match your documentation needs and team workflow.
+
+<Tabs>
+  <Tab title="Basic Settings" icon="settings">
+    Set project name, description, and visibility options.
+    
+    <CodeGroup tabs="JSON,YAML">
+      ```json
+{
+  "name": "My API Documentation",
+  "description": "REST API documentation for my service",
+  "visibility": "private",
+  "version": "1.0.0"
+}
+      ```
+      ```yaml
+name: My API Documentation
+description: REST API documentation for my service
+visibility: private
+version: 1.0.0
+      ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Team Access" icon="users">
+    Manage team member permissions and access levels.
+  </Tab>
+  <Tab title="Integrations" icon="plug">
+    Connect to external tools and services.
+  </Tab>
+</Tabs>
+
+## Adding Content
+
+Start adding your documentation content using the built-in editor or by importing existing files.
+
+<ExpandableGroup>
+  <Expandable title="Supported Formats" default-open="true">
+    - Markdown (.md, .mdx)
+    - OpenAPI specifications (.json, .yaml)
+    - Plain text files
+    - HTML documents
+  </Expandable>
+  <Expandable title="Import Methods" default-open="false">
+    - Direct file upload
+    - Git repository sync
+    - API integration
+    - Bulk import from ZIP files
+  </Expandable>
+</ExpandableGroup>
+
+### Writing Documentation
+
+Use the rich text editor to create and edit your documentation with support for formatting, code blocks, and media.
+
+<Steps>
+  <Step title="Create Document" icon="file-plus">
+    Click the "New Document" button and select your document type.
+  </Step>
+  <Step title="Add Content" icon="edit">
+    Write your content using Markdown syntax with live preview.
+  </Step>
+  <Step title="Insert Media" icon="image">
+    Upload images, diagrams, and other media files to enhance your documentation.
+  </Step>
+  <Step title="Save and Publish" icon="save">
+    Save your work and publish it to make it available to your team.
+  </Step>
+</Steps>
+
+## API Integration
+
+Integrate Dmitry Nesterenko Documentation with your development workflow using our REST API.
+
+<CodeGroup tabs="curl,JavaScript">
+  ```bash
+curl -X POST https://api.docs.example.com/v1/projects \
+  -H "Authorization: Bearer YOUR_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "New Project",
+    "description": "Project description",
+    "visibility": "private"
+  }'
+  ```
+  ```javascript
+const createProject = async (token, projectData) => {
+  const response = await fetch('https://api.docs.example.com/v1/projects', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(projectData)
+  });
+  
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  
+  return await response.json();
+};
+
+// Usage
+const project = await createProject('YOUR_API_TOKEN', {
+  name: 'New Project',
+  description: 'Project description',
+  visibility: 'private'
+});
+  ```
+</CodeGroup>
+
+<Callout kind="tip">
+  Generate an API token from your account settings to authenticate API requests securely.
+</Callout>
+
+## Next Steps
+
+Now that you've set up your account and created your first project, explore advanced features like version control integration and team collaboration. Check out the configuration guide for more detailed setup options and the API reference for programmatic access.
+
+<Expandable title="Troubleshooting" default-open="false">
+  If you encounter issues during setup, check our troubleshooting guide or contact support. Common issues include email verification problems and permission settings.
+</Expandable>

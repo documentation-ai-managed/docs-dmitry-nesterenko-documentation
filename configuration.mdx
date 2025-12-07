@@ -1,0 +1,232 @@
+---
+title: Configuration
+description: Detailed configuration options and settings for Dmitry Nesterenko Documentation
+---
+
+## Workspace Configuration
+
+Configure your workspace settings to customize the behavior and appearance of your documentation platform. These settings apply to all projects within your workspace.
+
+<Columns cols={2}>
+  <Card title="General Settings" icon="settings" href="#general-settings">
+    Basic workspace information and branding options.
+  </Card>
+  <Card title="Security Settings" icon="shield" href="#security-settings">
+    Access controls and authentication configurations.
+  </Card>
+</Columns>
+
+### General Settings
+
+Set up the basic information and branding for your workspace.
+
+<Tabs>
+  <Tab title="Basic Info" icon="info">
+    Configure workspace name, description, and contact information.
+    
+    <CodeGroup tabs="JSON,Environment Variables">
+      ```json
+{
+  "name": "My Workspace",
+  "description": "Documentation workspace for my team",
+  "contactEmail": "admin@example.com",
+  "timezone": "UTC",
+  "language": "en"
+}
+      ```
+      ```bash
+export WORKSPACE_NAME="My Workspace"
+export WORKSPACE_DESCRIPTION="Documentation workspace for my team"
+export CONTACT_EMAIL="admin@example.com"
+export TIMEZONE="UTC"
+export DEFAULT_LANGUAGE="en"
+      ```
+    </CodeGroup>
+  </Tab>
+  <Tab title="Branding" icon="palette">
+    Customize the look and feel of your documentation.
+  </Tab>
+  <Tab title="Notifications" icon="bell">
+    Set up email and in-app notification preferences.
+  </Tab>
+</Tabs>
+
+## Project Configuration
+
+Each project within your workspace can have its own specific configuration settings that override workspace defaults.
+
+<Steps>
+  <Step title="Access Project Settings" icon="settings">
+    Navigate to your project dashboard and click on the settings gear icon.
+  </Step>
+  <Step title="Configure Basic Options" icon="edit">
+    Set project name, description, and visibility settings.
+  </Step>
+  <Step title="Set Permissions" icon="lock">
+    Define who can view, edit, and manage the project.
+  </Step>
+  <Step title="Configure Integrations" icon="plug">
+    Connect external tools and services to your project.
+  </Step>
+</Steps>
+
+### Permission Levels
+
+Dmitry Nesterenko Documentation supports granular permission controls for different user roles.
+
+<ExpandableGroup>
+  <Expandable title="Viewer Permissions" default-open="true">
+    - Read access to all documentation
+    - Search and browse content
+    - Download and export documents
+    - View change history
+  </Expandable>
+  <Expandable title="Editor Permissions" default-open="false">
+    - All viewer permissions
+    - Create and edit documents
+    - Upload media files
+    - Manage document versions
+    - Comment on changes
+  </Expandable>
+  <Expandable title="Admin Permissions" default-open="false">
+    - All editor permissions
+    - Manage project settings
+    - Add and remove team members
+    - Configure integrations
+    - Delete documents and projects
+  </Expandable>
+</ExpandableGroup>
+
+## Integration Configuration
+
+Connect your documentation workspace to external tools and services for enhanced functionality.
+
+<Callout kind="info">
+  Integrations allow you to sync documentation with your development workflow and automate updates.
+</Callout>
+
+### Version Control Integration
+
+Link your projects to Git repositories for automatic synchronization and version control.
+
+<CodeGroup tabs="GitHub,Self-hosted Git">
+  ```bash
+# Connect to GitHub repository
+git remote add docs https://github.com/username/repo.git
+git push docs main:docs
+  ```
+  ```bash
+# Connect to self-hosted Git server
+git remote add docs https://git.company.com/username/repo.git
+git config --global credential.helper store
+  ```
+</CodeGroup>
+
+### API Integrations
+
+Configure webhooks and API connections to automate documentation updates.
+
+<Tabs>
+  <Tab title="Webhooks" icon="webhook">
+    Set up webhooks to trigger documentation updates when code changes.
+    
+    <Steps>
+      <Step title="Create Webhook" icon="plus">
+        Generate a new webhook URL in your project settings.
+      </Step>
+      <Step title="Configure Trigger" icon="settings">
+        Specify events that should trigger the webhook (push, pull request, etc.).
+      </Step>
+      <Step title="Test Integration" icon="check-circle">
+        Send a test payload to verify the webhook is working.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="API Tokens" icon="key">
+    Generate and manage API tokens for programmatic access.
+  </Tab>
+  <Tab title="OAuth Apps" icon="lock">
+    Configure OAuth applications for third-party integrations.
+  </Tab>
+</Tabs>
+
+## Security Configuration
+
+Implement security measures to protect your documentation and control access.
+
+<Expandable title="Two-Factor Authentication" default-open="false">
+  Enable 2FA for all users in your workspace to add an extra layer of security. Users can use authenticator apps or SMS for verification.
+</Expandable>
+
+### Audit Logging
+
+Track all activities in your workspace for compliance and security monitoring.
+
+<Columns cols={3}>
+  <Card title="User Activity" icon="activity" href="#user-activity">
+    Monitor user logins, document access, and editing activities.
+  </Card>
+  <Card title="API Usage" icon="api" href="#api-usage">
+    Track API calls and integration usage.
+  </Card>
+  <Card title="Security Events" icon="alert-triangle" href="#security-events">
+    Log security-related events like failed login attempts.
+  </Card>
+</Columns>
+
+## Advanced Settings
+
+Fine-tune your workspace and projects with advanced configuration options.
+
+<Callout kind="danger">
+  Advanced settings can affect platform performance and security. Only modify these if you understand the implications.
+</Callout>
+
+### Performance Tuning
+
+Optimize your workspace for better performance based on your usage patterns.
+
+<CodeGroup tabs="Configuration File,Environment Variables">
+  ```json
+{
+  "cache": {
+    "enabled": true,
+    "ttl": 3600,
+    "maxSize": "1GB"
+  },
+  "search": {
+    "indexBatchSize": 1000,
+    "maxResults": 10000
+  },
+  "uploads": {
+    "maxFileSize": "50MB",
+    "allowedTypes": ["md", "json", "yaml", "pdf"]
+  }
+}
+  ```
+  ```bash
+export CACHE_ENABLED=true
+export CACHE_TTL=3600
+export SEARCH_BATCH_SIZE=1000
+export MAX_UPLOAD_SIZE=50MB
+  ```
+</CodeGroup>
+
+### Custom Domains
+
+Set up custom domains for your documentation to match your brand.
+
+<Steps>
+  <Step title="Purchase Domain" icon="globe">
+    Acquire a domain name from a registrar.
+  </Step>
+  <Step title="Configure DNS" icon="settings">
+    Point your domain to our servers using CNAME records.
+  </Step>
+  <Step title="SSL Certificate" icon="shield">
+    Enable HTTPS with automatic SSL certificate provisioning.
+  </Step>
+  <Step title="Verify Setup" icon="check">
+    Test your custom domain and ensure all redirects work correctly.
+  </Step>
+</Steps>
